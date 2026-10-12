@@ -1,139 +1,59 @@
-Incident Investigation Report
+# Security Incident Investigation Report
 
-Project: Python Security Log Analyzer
-Incident Type: Suspected Brute-Force Attack and Successful Authentication
-Analysis Date: October 10, 2026
-Data Source: Simulated authentication logs
-Severity: CRITICAL
+**Case ID:** LAB-004  
+**Title:** Repeated Authentication Failures Followed by Success  
+**Environment:** Python Security Log Analyzer (simulated CSV data)  
+**Classification:** Suspicious authentication pattern — unconfirmed  
+**Status:** Lab investigation / no real-world incident  
+**Date of simulated activity:** October 20, 2025
 
-1. Executive Summary
+## Executive summary
 
-During an analysis of simulated authentication logs, the Python Security Log Analyzer identified multiple failed login attempts followed by a successful login from the same IP address.
+The analyzer detected five failed login attempts against the `admin` account from the simulated source IP `192.168.1.10` within two minutes. A successful login from the same IP and username occurred 30 seconds after the fifth failure. The lab detection engine generated a HIGH alert for possible brute-force behavior and a CRITICAL alert for a successful login following repeated failures. The evidence does **not** establish that an account was compromised.
 
-The activity triggered both a HIGH-severity brute-force alert and a CRITICAL-severity successful-login-after-failures alert.
+## Scope and evidence
 
-This pattern may indicate that an attacker successfully guessed or obtained valid account credentials. Because this investigation uses simulated data, no actual security breach occurred.
+- Source: `sample_logs.csv`, a synthetic authentication log.
+- Detection: `detection_rules.py`, configured for five failures within a rolling five-minute window.
+- Output: `security_alerts.csv` and the local Streamlit dashboard.
+- All timestamps are naive sample timestamps; no timezone is specified.
+- `192.168.1.10` is a private, illustrative IP address.
 
-2. Evidence Collected
+## Timeline
 
-Field
+| Timestamp | Event | Source IP | Username |
+|---|---|---|---|
+| 2026-10-10 10:00:00 | Failed login | 192.168.1.10 | admin |
+| 2026-10-10 10:00:30 | Failed login | 192.168.1.10 | admin |
+| 2026-10-10 10:01:00 | Failed login | 192.168.1.10 | admin |
+| 2026-10-10 10:01:30 | Failed login | 192.168.1.10 | admin |
+| 2026-10-10 10:02:00 | Failed login; HIGH alert threshold reached | 192.168.1.10 | admin |
+| 2026-10-10 10:02:30 | Successful login; CRITICAL correlation alert | 192.168.1.10 | admin |
 
-Value
+## Findings
 
-Source IP
+1. Five failed attempts occurred within the configured five-minute detection window.
+2. A successful authentication followed the failures for the same source IP and username.
+3. The analyzer produced two lab-defined alerts: HIGH (possible brute force) and CRITICAL (success after failures).
+4. This pattern could be caused by an authorized user entering an incorrect password repeatedly; the data alone cannot distinguish that from malicious activity.
 
-203.0.113.10
+## Analyst assessment
 
-Target Account
+**Disposition:** Suspicious pattern; additional evidence required.  
+**Confidence:** High that the configured rules matched the synthetic events; low confidence about malicious intent or compromise.
 
-admin
+## Recommended investigation steps (real environment)
 
-First Failed Login
+- Verify whether the source IP, user, device, and login time are expected.
+- Review authentication logs for adjacent events and other affected accounts.
+- Check MFA, device, and identity-provider records when authorized and available.
+- Contact the account owner or administrator through an approved process if needed.
+- Escalate and contain only if supporting evidence or established procedures justify it.
 
-2026-10-10 10:00:00
+## Outcome
 
-Fifth Failed Login
+No real account or endpoint was affected. The case demonstrates alert triage, timeline reconstruction, evidence interpretation, and documentation using simulated data.
 
-2026-10-10 10:02:00
+## Limitations
 
-Successful Login
-
-2026-10-10 10:02:30
-
-Failed Attempts
-
-5
-
-Detection Window
-
-5 minutes
-
-The IP address belongs to a reserved documentation range and does not identify a real attacker.
-
-3. Timeline of Events
-
-Timestamp
-
-Event
-
-Description
-
-10:00:00
-
-FAILED_LOGIN
-
-First failed authentication
-
-10:00:30
-
-FAILED_LOGIN
-
-Second failed authentication
-
-10:01:00
-
-FAILED_LOGIN
-
-Third failed authentication
-
-10:01:30
-
-FAILED_LOGIN
-
-Fourth failed authentication
-
-10:02:00
-
-FAILED_LOGIN
-
-Fifth failed authentication
-
-10:02:30
-
-SUCCESS_LOGIN
-
-Successful authentication
-
-4. Detection Results
-
-Alert 1: Possible Brute-Force Attack
-
-Severity: HIGH
-
-Five failed login attempts occurred within five minutes.
-
-The activity exceeded the configured detection threshold.
-
-Alert 2: Successful Login After Multiple Failures
-
-Severity: CRITICAL
-
-The same source IP successfully authenticated after five failed attempts.
-
-This pattern warrants investigation for possible account compromise.
-
-5. Investigation Findings
-
-The repeated authentication failures suggest an attempt to guess account credentials. The successful login immediately afterward increases concern that the attempt may have succeeded.
-
-However, authentication logs alone cannot prove malicious intent or confirm account compromise. Additional evidence would be required.
-
-6. Recommended Response
-
-Review authentication logs for additional suspicious activity.
-
-Confirm whether the successful login was authorized.
-
-Review the account's recent activity and active sessions.
-
-Reset credentials and revoke suspicious sessions if compromise is confirmed or strongly suspected.
-
-Enable multifactor authentication and appropriate login protections.
-
-Continue monitoring the source IP and affected account.
-
-7. Conclusion
-
-The Python Security Log Analyzer successfully identified a simulated brute-force pattern and a subsequent successful login.
-
-This investigation demonstrates the use of Python-based log analysis, automated detection rules, alert severity classification, and incident documentation in a SOC-style workflow.
+This is a synthetic demonstration, not a validated real-world intrusion. The report is based only on the sample CSV and the analyzer's configured rules. No packet captures, endpoint telemetry, or identity-provider records were examined.
