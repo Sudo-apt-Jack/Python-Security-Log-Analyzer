@@ -9,7 +9,7 @@
 
 ## Executive summary
 
-The analyzer detected five failed login attempts against the `admin` account from the simulated source IP `192.168.1.10` within two minutes. A successful login from the same IP and username occurred 30 seconds after the fifth failure. The lab detection engine generated a HIGH alert for possible brute-force behavior and a CRITICAL alert for a successful login following repeated failures. The evidence does **not** establish that an account was compromised.
+The analyzer detected five failed login attempts against the `admin` account from the simulated source IP `203.0.113.10` within two minutes. A successful login from the same IP and username occurred 30 seconds after the fifth failure. The lab detection engine generated a HIGH alert for possible brute-force behavior and a CRITICAL alert for a successful login following repeated failures. The evidence does **not** establish that an account was compromised.
 
 ## Scope and evidence
 
@@ -17,18 +17,18 @@ The analyzer detected five failed login attempts against the `admin` account fro
 - Detection: `detection_rules.py`, configured for five failures within a rolling five-minute window.
 - Output: `security_alerts.csv` and the local Streamlit dashboard.
 - All timestamps are naive sample timestamps; no timezone is specified.
-- `192.168.1.10` is a private, illustrative IP address.
+- `203.0.113.10` is a private, illustrative IP address.
 
 ## Timeline
 
 | Timestamp | Event | Source IP | Username |
 |---|---|---|---|
-| 2026-10-10 10:00:00 | Failed login | 192.168.1.10 | admin |
-| 2026-10-10 10:00:30 | Failed login | 192.168.1.10 | admin |
-| 2026-10-10 10:01:00 | Failed login | 192.168.1.10 | admin |
-| 2026-10-10 10:01:30 | Failed login | 192.168.1.10 | admin |
-| 2026-10-10 10:02:00 | Failed login; HIGH alert threshold reached | 192.168.1.10 | admin |
-| 2026-10-10 10:02:30 | Successful login; CRITICAL correlation alert | 192.168.1.10 | admin |
+| 2026-10-10 10:00:00 | Failed login | 203.0.113.10 | admin |
+| 2026-10-10 10:00:30 | Failed login | 203.0.113.10 | admin |
+| 2026-10-10 10:01:00 | Failed login | 203.0.113.10 | admin |
+| 2026-10-10 10:01:30 | Failed login | 203.0.113.10 | admin |
+| 2026-10-10 10:02:00 | Failed login; HIGH alert threshold reached | 203.0.113.10 | admin |
+| 2026-10-10 10:02:30 | Successful login; CRITICAL correlation alert | 203.0.113.10 | admin |
 
 ## Findings
 
